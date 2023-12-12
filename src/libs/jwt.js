@@ -3,14 +3,14 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../config.js";
 
 export const generateAccessToken = (user) => {
   const accessToken = jwt.sign(user, ACCESS_TOKEN_KEY, {
-    expiresIn: "5m", // Generar un nuevo token de acceso válido por 5 minutos
+    expiresIn: "5m", // Generar un nuevo token de acceso válido por 6 minutos
   });
   return accessToken;
 };
 
 export const generateRefreshToken = (user) => {
   const refreshToken = jwt.sign(user, REFRESH_TOKEN_KEY, {
-    expiresIn: "1d", // Generar un nuevo token de acceso válido por 1 día
+    expiresIn: "1d", // Generar un nuevo token de actualizacion válido por 1 día
   });
   return refreshToken;
 };
