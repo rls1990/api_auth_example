@@ -14,7 +14,7 @@ export const login = async (req, res) => {
     const user = {
       id: 1,
       email: "usuario@example.com",
-      password: "$2b$10$rwJocYsoVGgX/wk4HekRPubw9i0XjbW6jwjACdN6qPZUH4mjdvmhy", // Contraseña encriptada
+      password: "$2b$10$rwJocYsoVGgX/wk4HekRPubw9i0XjbW6jwjACdN6qPZUH4mjdvmhy", // La contrasña es: contraseña
     };
 
     const isMatch = await bcript.compare(password, user.password);
