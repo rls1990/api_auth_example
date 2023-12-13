@@ -7,29 +7,27 @@ import bcript from "bcrypt";
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { nombre, password } = req.body;
 
-    const passwordHash = await bcript.hash(password, 10);
+    //const passwordHash = await bcript.hash(password, 10);
 
     const user = {
       id: 1,
-      email: "usuario@example.com",
-      password: "$2b$10$rwJocYsoVGgX/wk4HekRPubw9i0XjbW6jwjACdN6qPZUH4mjdvmhy", // La contrasña es: contraseña
+      nombre: "admin",
+      password: "$2b$10$Njnci2DplDbIULc0x1DOjuDZ0d1HLTxNAIiAIHw.6U4DKgl9xXROy", // contraseña:admin123
     };
 
-    const isMatch = await bcript.compare(password, user.password);
+    const isMatch = bcript.compare(password, user.password);
 
-    if (!isMatch) {
+    if (!isMatch || nombre !== user.nombre) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
-    // La contraseña es correcta, se puede generar el token de acceso
+    // Las credenciales son correctas, se puede generar el token de acceso y el token de actualización
     const accessToken = generateAccessToken({ id: user.id });
-
-    // También se puede generar el token de actualización (opcional)
     const refreshToken = generateRefreshToken({ id: user.id });
 
-    res.json({ accessToken, refreshToken });
+    res.json({ accessToken, refreshToken, user: { id: user.id } });
   } catch (error) {
     console.log(error);
     res.status(401).json({ message: "Credenciales inválidas" });
@@ -41,6 +39,19 @@ export const getUsers = (req, res) => {
     // Acceso a la ruta protegida solo si el token de acceso es válido
     res.json({
       message: "Has accedido a una ruta protegida",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ message: "Credenciales inválidas" });
+  }
+};
+
+export const verify = (req, res) => {
+  try {
+    // Acceso a la ruta protegida solo si el token de acceso es válido
+    res.json({
+      message: "Token de acceso verificado",
+      user: req.user,
     });
   } catch (error) {
     console.log(error);
