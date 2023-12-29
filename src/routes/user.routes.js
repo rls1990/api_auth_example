@@ -1,15 +1,23 @@
 import { Router } from "express";
-import { authenticateToken, refreshAccessToken } from "../libs/jwt.js";
-import { login, getUsers, verify } from "../controller/user.controller.js";
+import {
+  authRequired,
+  refreshAccessToken,
+} from "../middleware/auth.middleware.js";
+import {
+  login,
+  getUsers,
+  verify,
+  refresh,
+} from "../controller/user.controller.js";
 
 const router = Router();
 
 router.post("/login", login);
 
-router.get("/users", authenticateToken, getUsers); // Ruta protegida
+router.get("/users", authRequired, getUsers); // Ruta protegida
 
-router.get("/verify", authenticateToken, verify); // Ruta protegida
+router.get("/verify", authRequired, verify); // Ruta protegida
 
-router.get("/refresh", refreshAccessToken);
+router.get("/refresh", refreshAccessToken, refresh);
 
 export default router;

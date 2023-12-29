@@ -1,11 +1,9 @@
-import { generateAccessToken, generateRefreshToken } from "../libs/jwt.js";
-import bcript from "bcrypt";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import { compare } from "../utils/bcrypt.js";
 
 export const login = async (req, res) => {
   try {
     const { nombre, password } = req.body;
-
-    //const passwordHash = await bcript.hash(password, 10);
 
     const user = {
       id: 1,
@@ -13,7 +11,7 @@ export const login = async (req, res) => {
       password: "$2b$10$Njnci2DplDbIULc0x1DOjuDZ0d1HLTxNAIiAIHw.6U4DKgl9xXROy", // contraseña:admin123
     };
 
-    const isMatch = await bcript.compare(password, user.password);
+    const isMatch = await compare(password, user.password);
 
     if (nombre !== user.nombre || !isMatch) {
       console.log("entro");
@@ -49,6 +47,19 @@ export const verify = (req, res) => {
     res.json({
       message: "Token de acceso verificado",
       user: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ message: "Credenciales inválidas" });
+  }
+};
+
+export const refresh = (req, res) => {
+  try {
+    res.json({
+      message: "Token de acceso generado",
+      user: req.user,
+      accessToken: req.accessToken,
     });
   } catch (error) {
     console.log(error);
